@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUMINA | Cinematic Photography Studio</title>
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    
+    <!-- Fonts -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&display=swap');
+    </style>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- Tailwind CSS with custom config -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'luxury-gold': '#D4AF37',
+                        'charcoal': '#1A1A1A',
+                        'off-white': '#F5F5F5',
+                        'muted-gold': '#B8973E',
+                    },
+                    fontFamily: {
+                        'sans': ['Manrope', 'system-ui', 'sans-serif'],
+                        'serif': ['Playfair Display', 'Georgia', 'serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --bg-color: #050505;
+            --text-main: #f0f0f0;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --primary-accent: #D4AF37;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Manrope', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, .serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-accent);
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #B8973E;
+        }
+
+        /* Loading Animation */
+        .loader {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.6s ease-out;
+        }
+        
+        .loader-content {
+            text-align: center;
+        }
+        
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(212, 175, 55, 0.3);
+            border-top: 3px solid var(--primary-accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 2rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(90deg, #D4AF37, #FFD700, #F5F5DC);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Contact Form Styles */
+        .form-input {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            width: 100%;
+            padding: 1rem 1.25rem;
+            color: white;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-accent);
+            background: rgba(212, 175, 55, 0.05);
+            box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.1);
+        }
+
+        /* Project Card Hover Effects */
+        .project-card {
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .project-card:hover {
+            transform: translateY(-8px);
+        }
+        
+        .project-card img {
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .project-card:hover img {
+            transform: scale(1.08);
+        }
+        
+        .project-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2rem;
+        }
+        
+        .project-card:hover .project-overlay {
+            opacity: 1;
+        }
+
+        /* WhatsApp/Call Button Styles */
+        .contact-float {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 90;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+        
+        .whatsapp-btn, .call-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            text-decoration: none;
+        }
+        
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+        }
+        
+        .call-btn {
+            background: #D4AF37;
+            color: white;
+        }
+        
+        .whatsapp-btn:hover, .call-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+        }
+        
+        .contact-tooltip {
+            position: absolute;
+            right: 70px;
+            background: rgba(0, 0, 0, 0.85);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .whatsapp-btn:hover .contact-tooltip,
+        .call-btn:hover .contact-tooltip {
+            opacity: 1;
+        }
+
+        /* Mobile Responsive Nav */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 400px;
+            height: 100vh;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 80;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 6rem 2rem 2rem;
+            border-left: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        
+        .mobile-nav.active {
+            right: 0;
+        }
+        
+        .mobile-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 79;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        
+        .mobile-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* CTA Button Glow Effect */
+        .cta-glow {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-glow::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #D4AF37, #FFD700, #D4AF37);
+            border-radius: inherit;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .cta-glow:hover::after {
+            opacity: 0.6;
+            animation: glow 1.5s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            0% { filter: blur(5px); opacity: 0.6; }
+            100% { filter: blur(8px); opacity: 0.8; }
+        }
+
+        /* Testimonial Cards */
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+
+        /* Portfolio Filter */
+        .portfolio-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+        
+        .filter-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: #D4AF37;
+            color: #D4AF37;
+        }
+
+        /* Stats Counter Animation */
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 300;
+            color: #D4AF37;
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3.5rem;
+            }
+            
+            .contact-float {
+                bottom: 1.5rem;
+                right: 1.5rem;
+            }
+            
+            .whatsapp-btn, .call-btn {
+                width: 56px;
+                height: 56px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Loading Screen -->
+    <div class="loader" id="pageLoader">
+        <div class="loader-content">
+            <div class="spinner"></div>
+            <div class="text-center">
+                <h1 class="text-3xl md:text-4xl serif italic mb-2 gradient-text">LUMINA</h1>
+                <p class="text-sm text-gray-400 uppercase tracking-widest">Premium Photography Studio</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Contact Buttons (WhatsApp & Call) -->
+    <div class="contact-float">
+        <a href="https://wa.me/1234567890?text=Hi%20LUMINA%20Studio,%20I'm%20interested%20in%20your%20photography%20services" 
+           target="_blank" 
+           class="whatsapp-btn" 
+           aria-label="Contact via WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+            <span class="contact-tooltip">Message on WhatsApp</span>
+        </a>
+        
+        <a href="tel:+1234567890" 
+           class="call-btn" 
+           aria-label="Call the studio">
+            <i class="fas fa-phone-alt"></i>
+            <span class="contact-tooltip">Call Now: +1 (234) 567-890</span>
+        </a>
+    </div>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <!-- Mobile Navigation Menu -->
+    <div class="mobile-nav" id="mobileNav">
+        <a href="#" class="text-2xl serif font-bold mb-10 block">LUMINA.</a>
+        
+        <div class="flex flex-col gap-6">
+            <a href="#home" class="text-xl py-3 border-b border-white/10 hover:text-luxury-gold transition-colors" onclick="closeMobileNav()">Home</a>
+            <a href="#portfolio" class="text-xl py-3 border-b border-white/10 hover:text-luxury-gold transition-colors" onclick="closeMobileNav()">Portfolio</a>
+            <a href="#services" class="text-xl py-3 border-b border-white/10 hover:text-luxury-gold transition-colors" onclick="closeMobileNav()">Services</a>
+            <a href="#about" class="text-xl py-3 border-b border-white/10 hover:text-luxury-gold transition-colors" onclick="closeMobileNav()">About</a>
+            <a href="#testimonials" class="text-xl py-3 border-b border-white/10 hover:text-luxury-gold transition-colors" onclick="closeMobileNav()">Testimonials</a>
+            <a href="#contact" class="text-xl py-3 border-b border-white/10 hover:text-luxury-gold transition-colors" onclick="closeMobileNav()">Contact</a>
+        </div>
+        
+        <div class="mt-10 pt-6 border-t border-white/10">
+            <a href="tel:+1234567890" class="block mb-3 hover:text-luxury-gold transition-colors">
+                <i class="fas fa-phone mr-3"></i> +1 (234) 567-890
+            </a>
+            <a href="mailto:hello@luminastudio.com" class="block mb-3 hover:text-luxury-gold transition-colors">
+                <i class="fas fa-envelope mr-3"></i> hello@luminastudio.com
+            </a>
+            <div class="flex gap-4 mt-6">
+                <a href="#" class="text-xl hover:text-luxury-gold transition-colors"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-xl hover:text-luxury-gold transition-colors"><i class="fab fa-pinterest-p"></i></a>
+                <a href="#" class="text-xl hover:text-luxury-gold transition-colors"><i class="fab fa-behance"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation -->
+    <nav class="fixed w-full p-6 md:p-10 flex justify-between items-center z-50 bg-black/80 backdrop-blur-sm">
+        <a href="#home" class="text-2xl serif font-bold tracking-tighter hover:text-luxury-gold transition-colors">LUMINA.</a>
+        
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex gap-10 text-sm uppercase tracking-widest font-medium">
+            <a href="#portfolio" class="nav-link hover:text-luxury-gold transition-colors">Portfolio</a>
+            <a href="#services" class="nav-link hover:text-luxury-gold transition-colors">Services</a>
+            <a href="#about" class="nav-link hover:text-luxury-gold transition-colors">About</a>
+            <a href="#contact" class="nav-link hover:text-luxury-gold transition-colors">Contact</a>
+        </div>
+
+        <!-- CTA and Mobile Menu Button -->
+        <div class="flex items-center gap-4">
+            <a href="#contact" class="hidden md:block cta-glow bg-luxury-gold text-black px-8 py-3 rounded-full text-sm font-bold uppercase tracking-widest hover:bg-white transition-all">
+                Book a Session
+            </a>
+            
+            <button id="mobileMenuBtn" class="md:hidden text-2xl focus:outline-none">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="relative min-h-screen w-full overflow-hidden flex items-center justify-center pt-20">
+            <!-- Background with multiple layers for parallax effect -->
+            <div class="absolute inset-0 z-0">
+                <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black z-10"></div>
+                <!-- Hero image with fallback -->
+                <img src="https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3" 
+                     alt="LUMINA Studio - Cinematic Photography"
+                     class="w-full h-full object-cover opacity-60"
+                     onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1553095066-5014bc7b7f2d?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3'">
+            </div>
+            
+            <!-- Hero Content -->
+            <div class="z-10 text-center relative px-4 max-w-6xl mx-auto">
+                <p class="text-sm md:text-base uppercase tracking-[0.3em] mb-6 text-luxury-gold/80 animate-fade-in-up opacity-0" style="animation-delay: 0.2s">
+                    Premium Cinematic Photography
+                </p>
+                
+                <h1 class="hero-title text-5xl md:text-7xl lg:text-8xl xl:text-9xl leading-[0.9] serif mb-8 animate-fade-in-up opacity-0" style="animation-delay: 0.4s">
+                    Where Vision<br>
+                    <span class="italic text-luxury-gold">Meets Precision</span>
+                </h1>
+                
+                <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-10 animate-fade-in-up opacity-0" style="animation-delay: 0.6s">
+                    Capturing the untold stories of luxury brands, editorial features, and timeless moments with cinematic excellence.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up opacity-0" style="animation-delay: 0.8s">
+                    <a href="#portfolio" class="bg-white text-black px-8 py-4 rounded-full text-sm font-bold uppercase tracking-widest hover:bg-gray-100 transition-all">
+                        View Our Work
+                    </a>
+                    <a href="#contact" class="border-2 border-white text-white px-8 py-4 rounded-full text-sm font-bold uppercase tracking-widest hover:bg-white/10 transition-all">
+                        Get in Touch
+                    </a>
+                </div>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-10">
+                <a href="#portfolio" class="flex flex-col items-center group">
+                    <span class="text-xs uppercase tracking-widest text-white/50 mb-2 group-hover:text-luxury-gold transition-colors">Explore</span>
+                    <div class="h-10 w-[1px] bg-gradient-to-b from-luxury-gold to-transparent animate-pulse-slow"></div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="py-16 bg-gradient-to-b from-black to-charcoal">
+            <div class="container mx-auto px-6 md:px-20">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div class="stat-item">
+                        <div class="stat-number" data-count="150">0</div>
+                        <p class="text-sm uppercase tracking-widest text-gray-400 mt-2">Projects</p>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-count="50">0</div>
+                        <p class="text-sm uppercase tracking-widest text-gray-400 mt-2">Clients</p>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-count="12">0</div>
+                        <p class="text-sm uppercase tracking-widest text-gray-400 mt-2">Awards</p>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-count="8">0</div>
+                        <p class="text-sm uppercase tracking-widest text-gray-400 mt-2">Years</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section id="portfolio" class="py-24 px-6 md:px-20 bg-black">
+            <div class="container mx-auto">
+                <div class="text-center mb-16">
+                    <p class="text-sm uppercase tracking-widest text-luxury-gold mb-4">Our Work</p>
+                    <h2 class="text-4xl md:text-6xl serif mb-6">Selected <span class="italic text-gray-500">Portfolio</span></h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">
+                        A curated collection of our finest cinematic photography work across fashion, commercial, and editorial domains.
+                    </p>
+                </div>
+
+                <!-- Portfolio Filter -->
+                <div class="portfolio-filter">
+                    <button class="filter-btn active" data-filter="all">All Works</button>
+                    <button class="filter-btn" data-filter="editorial">Editorial</button>
+                    <button class="filter-btn" data-filter="commercial">Commercial</button>
+                    <button class="filter-btn" data-filter="fashion">Fashion</button>
+                    <button class="filter-btn" data-filter="portrait">Portrait</button>
+                </div>
+
+                <!-- Portfolio Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 portfolio-grid">
+                    <!-- Portfolio Item 1 - Fashion -->
+                    <div class="project-card portfolio-item editorial fashion" data-category="editorial fashion">
+                        <div class="overflow-hidden aspect-[3/4] rounded-lg">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3" 
+                                 alt="Vogue Editorial Shoot - Fashion Photography" 
+                                 class="w-full h-full object-cover"
+                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=2068&auto=format&fit=crop&ixlib=rb-4.0.3'">
+                            <div class="project-overlay">
+                                <h3 class="text-xl serif italic mb-2">Vogue Editorial</h3>
+                                <p class="text-sm text-gray-300">Spring 2024 Collection</p>
+                                <span class="text-xs uppercase mt-4 inline-block border border-luxury-gold/30 text-luxury-gold px-3 py-1 rounded-full">Fashion</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Portfolio Item 2 - Commercial -->
+                    <div class="project-card portfolio-item commercial" data-category="commercial">
+                        <div class="overflow-hidden aspect-[4/3] rounded-lg">
+                            <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3" 
+                                 alt="Nike Commercial Campaign - Sportswear Photography" 
+                                 class="w-full h-full object-cover"
+                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3'">
+                            <div class="project-overlay">
+                                <h3 class="text-xl serif italic mb-2">Nike Campaign</h3>
+                                <p class="text-sm text-gray-300">Global Sportswear Launch</p>
+                                <span class="text-xs uppercase mt-4 inline-block border border-luxury-gold/30 text-luxury-gold px-3 py-1 rounded-full">Commercial</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Portfolio Item 3 - Portrait -->
+                    <div class="project-card portfolio-item portrait" data-category="portrait">
+                        <div class="overflow-hidden aspect-square rounded-lg">
+                            <img src="https://images.unsplash.com/photo-1519699047748-de8e457a634e?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3" 
+                                 alt="Actor Portrait Series - Cinematic Headshots" 
+                                 class="w-full h-full object-cover"
+                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3'">
+                            <div class="project-overlay">
+                                <h3 class="text-xl serif italic mb-2">Actor Portrait Series</h3>
+                                <p class="text-sm text-gray-300">Cinematic Headshots</p>
+                                <span class="text-xs uppercase mt-4 inline-block border border-luxury-gold/30 text-luxury-gold px-3 py-1 rounded-full">Portrait</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Portfolio Item 4 - Editorial -->
+                    <div class="project-card portfolio-item editorial" data-category="editorial">
+                        <div class="overflow-hidden aspect-[4/5] rounded-lg">
+                            <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?q=80&w=2067&auto=format&fit=crop&ixlib=rb-4.0.3" 
+                                 alt="ELLE Magazine Feature - Beauty Editorial" 
+                                 class="w-full h-full object-cover"
+                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1494790108755-2616b612b786?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3'">
+                            <div class="project-overlay">
+                                <h3 class="text-xl serif italic mb-2">ELLE Magazine</h3>
+                                <p class="text-sm text-gray-300">Beauty Editorial Feature</p>
+                                <span class="text-xs uppercase mt-4 inline-block border border-luxury-gold/30 text-luxury-gold px-3 py-1 rounded-full">Editorial</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Portfolio Item 5 - Commercial -->
+                    <div class="project-card portfolio-item commercial" data-category="commercial">
+                        <div class="overflow-hidden aspect-[16/9] rounded-lg">
+                            <img src="https://images.unsplash.com/photo-1607083206968-13611e3d76db?q=80&w=2015&auto=format&fit=crop&ixlib=rb-4.0.3" 
+                                 alt="Apple Product Photography - Tech Commercial" 
+                                 class="w-full h-full object-cover"
+                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3'">
+                            <div class="project-overlay">
+                                <h3 class="text-xl serif italic mb-2">Apple Product Launch</h3>
+                                <p class="text-sm text-gray-300">Tech Commercial Photography</p>
+                                <span class="text-xs uppercase mt-4 inline-block border border-luxury-gold/30 text-luxury-gold px-3 py-1 rounded-full">Commercial</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Portfolio Item 6 - Fashion -->
+                    <div class="project-card portfolio-item fashion" data-category="fashion">
+                        <div class="overflow-hidden aspect-[3/4] rounded-lg">
+                            <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=80&w=2068&auto=format&fit=crop&ixlib=rb-4.0.3" 
+                                 alt="Paris Fashion Week - Runway Photography" 
+                                 class="w-full h-full object-cover"
+                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3'">
+                            <div class="project-overlay">
+                                <h3 class="text-xl serif italic mb-2">Paris Fashion Week</h3>
+                                <p class="text-sm text-gray-300">Runway Photography</p>
+                                <span class="text-xs uppercase mt-4 inline-block border border-luxury-gold/30 text-luxury-gold px-3 py-1 rounded-full">Fashion</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- View More Button -->
+                <div class="text-center mt-16">
+                    <button id="loadMorePortfolio" class="border-2 border-white/30 px-12 py-4 rounded-full text-sm uppercase hover:bg-white hover:text-black transition-all duration-300">
+                        Load More Projects
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="py-24 px-6 md:px-20 bg-charcoal">
+            <div class="container mx-auto">
+                <div class="text-center mb-16">
+                    <p class="text-sm uppercase tracking-widest text-luxury-gold mb-4">What We Offer</p>
+                    <h2 class="text-4xl md:text-6xl serif mb-6">Our <span class="italic text-gray-500">Services</span></h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Service 1 -->
+                    <div class="bg-black/50 p-8 rounded-xl border border-white/10 hover:border-luxury-gold/30 transition-all duration-300 group">
+                        <div class="text-luxury-gold text-3xl mb-6 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <h3 class="text-2xl serif mb-4">Fashion & Editorial</h3>
+                        <p class="text-gray-400 mb-6">
+                            High-end fashion photography for magazines, lookbooks, and designer campaigns with cinematic storytelling.
+                        </p>
+                        <ul class="space-y-2 text-sm text-gray-500">
+                            <li class="flex items-center"><i class="fas fa-check text-luxury-gold mr-2"></i> Magazine Editorial</li>
+                            <li class="flex items-center"><i class="fas fa-check text-luxury-gold mr-2"></i> Lookbook Production</li>
+                            <li class="flex items-center"><i class="fas fa-check text-luxury-gold mr-2"></i> Runway Photography</li>
+                        </ul>
+                    </div>
+
+                    <!-- Service 2 -->
+                    <div class="bg-black/50 p-8 rounded-xl border border-white/10 hover:border-luxury-gold/30 transition-all duration-300 group">
+                        <div class="text-luxury-gold text-3xl mb-6 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <h3 class="text-2xl serif mb-4">Commercial & Advertising</h3>
+                        <p class="text-gray-400 mb-6">
+                            Brand photography that elevates products and tells compelling stories for global campaigns and advertising.
+                        </p>
+                        <ul class="space-y-2 text-sm text-gray-500">
+                            <li class="flex items-center"><i class="fas fa-check text-luxury-gold mr-2"></i> Product Photography</li>
+                            <li class="flex items-center"><i class="fas fa-check text-luxury-gold mr-2"></i> Brand Campaigns</li>
+                            <li class="flex items-center"><i class="fas fa-check text-luxury-gold mr-2"></i> Advertising Shoots</li>
+                        </ul>
+                    </div>
+
+                    <!-- Service 3 -->
+                    <div class="bg-black/50 p-8 rounded-xl border border-white/10 hover:border-luxury-gold/30 transition-all duration-300 group">
+                        <div class="text-luxury-gold text-3xl mb-6 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <h3 class="text-2xl serif mb-4">Portrait & Personal Branding</h3>
+                        <p class="text-gray-400 mb-6">
+                            Cinematic portrait sessions for executives, artists, and individuals seeking powerful personal branding imagery.
+                        </p>
+                        <ul class="space-y-2 text-sm text-gray-500">
+                            <li class="flex items-center"><i class="fas fa-check text-luxury-gold mr-2"></i> Executive Portraits</li>
+                            <li class="flex items-center"><i class="fas fa-check text-luxury-gold mr-2"></i> Artist Portfolios</li>
+                            <li class="flex items-center"><i class="fas fa-check text-luxury-gold mr-2"></i> Personal Branding</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Pricing CTA -->
+                <div class="mt-16 text-center">
+                    <p class="text-gray-400 mb-8">Ready to discuss your project?</p>
+                    <a href="#contact" class="inline-flex items-center gap-3 bg-luxury-gold text-black px-10 py-4 rounded-full text-sm font-bold uppercase tracking-widest hover:bg-white transition-all group">
+                        <span>Get a Custom Quote</span>
+                        <i class="fas fa-arrow-right group-hover:translate-x-2 transition-transform"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Client Logos -->
+        <section class="py-20 bg-black border-y border-white/5">
+            <div class="container mx-auto px-6 md:px-20">
+                <p class="text-center text-sm uppercase tracking-widest text-gray-500 mb-12">Trusted by Industry Leaders</p>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-8 items-center opacity-70 hover:opacity-100 transition-opacity duration-500">
+                    <!-- Client logos as text with styling - replace with actual logos -->
+                    <div class="text-center">
+                        <h4 class="text-xl serif italic text-gray-300">VOGUE</h4>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="text-xl serif font-bold text-gray-300">NIKE</h4>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="text-xl serif tracking-tighter text-gray-300">APPLE</h4>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="text-xl serif font-light text-gray-300">CHANEL</h4>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="text-xl serif font-bold italic text-gray-300">ELLE</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section id="testimonials" class="py-24 px-6 md:px-20 bg-charcoal">
+            <div class="container mx-auto">
+                <div class="text-center mb-16">
+                    <p class="text-sm uppercase tracking-widest text-luxury-gold mb-4">Client Stories</p>
+                    <h2 class="text-4xl md:text-6xl serif mb-6">Testimonials</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Testimonial 1 -->
+                    <div class="testimonial-card">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-luxury-gold to-muted-gold mr-4"></div>
+                            <div>
+                                <h4 class="font-bold">Sarah Chen</h4>
+                                <p class="text-sm text-gray-400">Creative Director, Vogue</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-300 italic mb-6">
+                            "LUMINA transformed our editorial vision into cinematic reality. Their attention to detail and artistic eye is unparalleled."
+                        </p>
+                        <div class="flex text-luxury-gold">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial 2 -->
+                    <div class="testimonial-card">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-luxury-gold to-muted-gold mr-4"></div>
+                            <div>
+                                <h4 class="font-bold">Marcus Johnson</h4>
+                                <p class="text-sm text-gray-400">Brand Manager, Nike</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-300 italic mb-6">
+                            "The campaign shots exceeded all expectations. LUMINA's team captured the essence of our brand perfectly."
+                        </p>
+                        <div class="flex text-luxury-gold">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial 3 -->
+                    <div class="testimonial-card">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-luxury-gold to-muted-gold mr-4"></div>
+                            <div>
+                                <h4 class="font-bold">Elena Rodriguez</h4>
+                                <p class="text-sm text-gray-400">Fashion Designer</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-300 italic mb-6">
+                            "Working with LUMINA was transformative. They understood my aesthetic and elevated it to new heights."
+                        </p>
+                        <div class="flex text-luxury-gold">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="min-h-screen flex items-center py-20 px-6 md:px-20 bg-black relative overflow-hidden">
+            <!-- Background Elements -->
+            <div class="absolute right-[-10%] top-[-10%] w-[500px] h-[500px] bg-luxury-gold opacity-5 blur-[100px] rounded-full pointer-events-none"></div>
+            <div class="absolute left-[-10%] bottom-[-10%] w-[400px] h-[400px] bg-luxury-gold opacity-5 blur-[100px] rounded-full pointer-events-none"></div>
+
+            <div class="container mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    
+                    <!-- Contact Info -->
+                    <div class="animate-fade-in-up opacity-0" style="animation-delay: 0.2s">
+                        <h2 class="text-5xl md:text-7xl serif mb-8">Let's create<br> <span class="text-luxury-gold italic">together.</span></h2>
+                        <p class="text-gray-400 text-lg max-w-lg leading-relaxed mb-12">
+                            Available for commissions and commercial projects worldwide. Contact us to discuss your vision, timeline, and investment.
+                        </p>
+                        
+                        <div class="space-y-8">
+                            <!-- Phone -->
+                            <div class="flex items-start">
+                                <div class="text-luxury-gold text-xl mr-4 mt-1">
+                                    <i class="fas fa-phone-alt"></i>
+                                </div>
+                                <div>
+                                    <span class="text-sm uppercase tracking-widest text-gray-500 block mb-1">Call Us</span>
+                                    <a href="tel:+1234567890" class="text-2xl serif hover:text-luxury-gold transition-colors">+1 (234) 567-890</a>
+                                    <p class="text-gray-500 text-sm mt-1">Mon-Fri, 9AM-6PM EST</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Email -->
+                            <div class="flex items-start">
+                                <div class="text-luxury-gold text-xl mr-4 mt-1">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <span class="text-sm uppercase tracking-widest text-gray-500 block mb-1">Email</span>
+                                    <a href="mailto:hello@luminastudio.com" class="text-xl hover:text-luxury-gold transition-colors">hello@luminastudio.com</a>
+                                </div>
+                            </div>
+                            
+                            <!-- Studio Address -->
+                            <div class="flex items-start">
+                                <div class="text-luxury-gold text-xl mr-4 mt-1">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div>
+                                    <span class="text-sm uppercase tracking-widest text-gray-500 block mb-1">Studio</span>
+                                    <p class="text-lg">142 Mercer Street<br>SoHo, New York 10012</p>
+                                    <p class="text-gray-500 text-sm mt-1">By appointment only</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Social Links -->
+                            <div class="flex gap-6 pt-4">
+                                <a href="#" class="text-2xl hover:text-luxury-gold transition-colors" aria-label="Instagram">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="#" class="text-2xl hover:text-luxury-gold transition-colors" aria-label="Behance">
+                                    <i class="fab fa-behance"></i>
+                                </a>
+                                <a href="#" class="text-2xl hover:text-luxury-gold transition-colors" aria-label="LinkedIn">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                <a href="#" class="text-2xl hover:text-luxury-gold transition-colors" aria-label="Pinterest">
+                                    <i class="fab fa-pinterest-p"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Form -->
+                    <div class="bg-charcoal p-8 md:p-12 rounded-2xl border border-white/10 relative shadow-2xl animate-fade-in-up opacity-0" style="animation-delay: 0.4s">
+                        <h3 class="text-2xl serif mb-8">Start Your Project</h3>
+                        
+                        <form id="bookingForm" class="flex flex-col gap-8 relative z-10">
+                            <!-- Name & Email -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="name" class="text-sm uppercase text-gray-500 tracking-widest mb-2 block">Your Name *</label>
+                                    <input type="text" id="name" name="name" placeholder="John Doe" required class="form-input">
+                                </div>
+                                <div>
+                                    <label for="email" class="text-sm uppercase text-gray-500 tracking-widest mb-2 block">Email Address *</label>
+                                    <input type="email" id="email" name="email" placeholder="john@example.com" required class="form-input">
+                                </div>
+                            </div>
+
+                            <!-- Phone -->
+                            <div>
+                                <label for="phone" class="text-sm uppercase text-gray-500 tracking-widest mb-2 block">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" placeholder="+1 (234) 567-8900" class="form-input">
+                            </div>
+
+                            <!-- Project Type -->
+                            <div>
+                                <label for="projectType" class="text-sm uppercase text-gray-500 tracking-widest mb-2 block">Project Type *</label>
+                                <select id="projectType" name="projectType" class="form-input cursor-pointer" required>
+                                    <option value="" disabled selected>Select a Service</option>
+                                    <option value="fashion-editorial">Fashion / Editorial</option>
+                                    <option value="commercial">Commercial / Advertising</option>
+                                    <option value="portrait">Portrait / Personal Branding</option>
+                                    <option value="product">Product Photography</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            <!-- Budget Range -->
+                            <div>
+                                <label for="budget" class="text-sm uppercase text-gray-500 tracking-widest mb-2 block">Estimated Budget</label>
+                                <select id="budget" name="budget" class="form-input cursor-pointer">
+                                    <option value="" selected>Select Budget Range</option>
+                                    <option value="1-3k">$1,000 - $3,000</option>
+                                    <option value="3-7k">$3,000 - $7,000</option>
+                                    <option value="7-15k">$7,000 - $15,000</option>
+                                    <option value="15k+">$15,000+</option>
+                                </select>
+                            </div>
+
+                            <!-- Project Details -->
+                            <div>
+                                <label for="message" class="text-sm uppercase text-gray-500 tracking-widest mb-2 block">Project Details *</label>
+                                <textarea id="message" name="message" rows="4" placeholder="Tell us about your project vision, timeline, location, and any specific requirements..." class="form-input resize-none" required></textarea>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" id="submitBtn" class="mt-4 bg-luxury-gold text-black py-4 px-8 rounded-full text-sm font-bold uppercase tracking-widest hover:bg-white transition-all flex justify-center items-center gap-3 group">
+                                <span>Send Inquiry</span>
+                                <i class="fas fa-arrow-right group-hover:translate-x-2 transition-transform"></i>
+                            </button>
+                            
+                            <p class="text-xs text-gray-500 text-center mt-4">
+                                We respond within 24 hours. For urgent inquiries, please call us directly.
+                            </p>
+                        </form>
+
+                        <!-- Success Message -->
+                        <div id="successMessage" class="absolute inset-0 bg-charcoal z-20 flex flex-col justify-center items-center text-center p-8 rounded-2xl opacity-0 pointer-events-none transition-all duration-500">
+                            <i class="fas fa-check-circle text-6xl text-luxury-gold mb-6"></i>
+                            <h3 class="text-2xl serif italic mb-4">Inquiry Received</h3>
+                            <p class="text-gray-400 mb-8 max-w-md">Thank you for your interest in LUMINA Studio. We will review your project details and contact you within 24 hours.</p>
+                            <button onclick="resetForm()" class="text-sm uppercase border-b border-luxury-gold pb-1 hover:text-gray-400 transition-colors">
+                                Send Another Inquiry
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-white/5 bg-black">
+        <div class="container mx-auto px-6 md:px-20">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-8 md:mb-0">
+                    <a href="#" class="text-2xl serif font-bold tracking-tighter hover:text-luxury-gold transition-colors">LUMINA.</a>
+                    <p class="text-gray-500 text-sm mt-2">Cinematic Photography Studio</p>
+                </div>
+                
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <!-- Quick Contact Footer -->
+                    <div class="flex flex-col md:flex-row gap-6 text-center md:text-left">
+                        <a href="tel:+1234567890" class="hover:text-luxury-gold transition-colors">
+                            <i class="fas fa-phone mr-2"></i> Call Us
+                        </a>
+                        <a href="mailto:hello@luminastudio.com" class="hover:text-luxury-gold transition-colors">
+                            <i class="fas fa-envelope mr-2"></i> Email Us
+                        </a>
+                        <a href="https://wa.me/1234567890" target="_blank" class="hover:text-luxury-gold transition-colors">
+                            <i class="fab fa-whatsapp mr-2"></i> WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/5 mt-8 pt-8 text-center text-sm text-gray-600">
+                <p>&copy; 2024 LUMINA Studio. All Rights Reserved.</p>
+                <p class="mt-2 text-xs">Professional photography services for editorial, commercial, and luxury brands.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // ========== 1. PAGE LOADER ==========
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('pageLoader');
+            
+            // Ensure loader shows for at least 1.5s for smooth experience
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    
+                    // Trigger animations after loader is gone
+                    document.querySelectorAll('.animate-fade-in-up').forEach(el => {
+                        el.style.animationPlayState = 'running';
+                    });
+                }, 600);
+            }, 1500);
+        });
+
+        // ========== 2. MOBILE NAVIGATION ==========
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        
+        function toggleMobileNav() {
+            mobileNav.classList.toggle('active');
+            mobileOverlay.classList.toggle('active');
+            document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : 'auto';
+        }
+        
+        function closeMobileNav() {
+            mobileNav.classList.remove('active');
+            mobileOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        
+        mobileMenuBtn.addEventListener('click', toggleMobileNav);
+        mobileOverlay.addEventListener('click', closeMobileNav);
+        
+        // Close mobile nav when clicking on a link
+        document.querySelectorAll('.mobile-nav a').forEach(link => {
+            link.addEventListener('click', closeMobileNav);
+        });
+
+        // ========== 3. PORTFOLIO FILTERING ==========
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const portfolioItems = document.querySelectorAll('.portfolio-item');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                const filterValue = this.getAttribute('data-filter');
+                
+                portfolioItems.forEach(item => {
+                    if (filterValue === 'all' || item.getAttribute('data-category').includes(filterValue)) {
+                        item.style.display = 'block';
+                        setTimeout(() => {
+                            item.style.opacity = '1';
+                            item.style.transform = 'translateY(0)';
+                        }, 100);
+                    } else {
+                        item.style.opacity = '0';
+                        item.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            item.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        });
+
+        // ========== 4. LOAD MORE PORTFOLIO ==========
+        const loadMoreBtn = document.getElementById('loadMorePortfolio');
+        let portfolioPage = 1;
+        
+        loadMoreBtn.addEventListener('click', function() {
+            // Simulate loading more portfolio items
+            this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Loading...';
+            this.disabled = true;
+            
+            setTimeout(() => {
+                // In a real implementation, this would fetch more items from a server
+                this.innerHTML = 'All Projects Loaded';
+                this.style.opacity = '0.5';
+                this.style.cursor = 'default';
+                
+                // Show a message
+                const message = document.createElement('p');
+                message.className = 'text-gray-500 text-sm mt-4';
+                message.textContent = 'All portfolio items are now displayed.';
+                this.parentNode.appendChild(message);
+            }, 1500);
+        });
+
+        // ========== 5. STATS COUNTER ANIMATION ==========
+        function animateStats() {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            
+            statNumbers.forEach(stat => {
+                const target = parseInt(stat.getAttribute('data-count'));
+                const duration = 2000; // 2 seconds
+                const increment = target / (duration / 16); // 60fps
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    stat.textContent = Math.floor(current);
+                }, 16);
+            });
+        }
+        
+        // Trigger stats animation when scrolled into view
+        const statsSection = document.querySelector('.stat-item');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateStats();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        if (statsSection) {
+            observer.observe(statsSection);
+        }
+
+        // ========== 6. CONTACT FORM HANDLING ==========
+        const form = document.getElementById('bookingForm');
+        const successMsg = document.getElementById('successMessage');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+            
+            // Show loading state
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Sending...';
+            submitBtn.disabled = true;
+            
+            try {
+                // In a real implementation, you would send this to your server
+                // Example with fetch API:
+                // const response = await fetch('https://your-backend.com/contact', {
+                //     method: 'POST',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify(data)
+                // });
+                
+                // Simulate API call delay
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Show success message
+                form.style.opacity = '0';
+                form.style.pointerEvents = 'none';
+                
+                successMsg.style.opacity = '1';
+                successMsg.style.pointerEvents = 'all';
+                
+                // In a real implementation, you might want to reset the form
+                // form.reset();
+                
+                // Log the data (in production, this would go to your server)
+                console.log('Form submission data:', data);
+                
+            } catch (error) {
+                console.error('Form submission error:', error);
+                alert('There was an error sending your message. Please try calling or emailing us directly.');
+                
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+        
+        function resetForm() {
+            form.reset();
+            successMsg.style.opacity = '0';
+            successMsg.style.pointerEvents = 'none';
+            
+            form.style.opacity = '1';
+            form.style.pointerEvents = 'all';
+            
+            submitBtn.innerHTML = '<span>Send Inquiry</span><i class="fas fa-arrow-right group-hover:translate-x-2 transition-transform"></i>';
+            submitBtn.disabled = false;
+        }
+
+        // ========== 7. SMOOTH SCROLLING ==========
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                e.preventDefault();
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // ========== 8. IMAGE LAZY LOADING ==========
+        // Simple lazy loading implementation
+        const images = document.querySelectorAll('img');
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.getAttribute('src');
+                    observer.unobserve(img);
+                }
+            });
+        }, { rootMargin: '50px' });
+        
+        images.forEach(img => imageObserver.observe(img));
+
+        // ========== 9. SCROLL-BASED NAVIGATION HIGHLIGHT ==========
+        window.addEventListener('scroll', function() {
+            const scrollPosition = window.scrollY;
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            // Find current section
+            document.querySelectorAll('section[id]').forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                const sectionHeight = section.clientHeight;
+                const sectionId = section.getAttribute('id');
+                
+                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                    navLinks.forEach(link => {
+                        link.classList.remove('text-luxury-gold');
+                        if (link.getAttribute('href') === `#${sectionId}`) {
+                            link.classList.add('text-luxury-gold');
+                        }
+                    });
+                }
+            });
+        });
+
+        // ========== 10. WHATSAPP DIRECT MESSAGE ENHANCEMENT ==========
+        // Pre-fill WhatsApp message based on page context
+        function updateWhatsAppLink() {
+            const pageTitle = document.title;
+            const whatsappBtn = document.querySelector('.whatsapp-btn');
+            const message = `Hi LUMINA Studio, I'm interested in your photography services. I'm viewing: ${pageTitle}`;
+            const encodedMessage = encodeURIComponent(message);
+            whatsappBtn.href = `https://wa.me/1234567890?text=${encodedMessage}`;
+        }
+        
+        // Update on page load
+        updateWhatsAppLink();
+        
+        // Also update when portfolio items are viewed
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const projectTitle = this.querySelector('h3').textContent;
+                const whatsappBtn = document.querySelector('.whatsapp-btn');
+                const message = `Hi LUMINA, I'm interested in your "${projectTitle}" project. Can we discuss?`;
+                const encodedMessage = encodeURIComponent(message);
+                whatsappBtn.href = `https://wa.me/1234567890?text=${encodedMessage}`;
+            });
+        });
+
+        // ========== 11. FORM VALIDATION ==========
+        const phoneInput = document.getElementById('phone');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function(e) {
+                const value = e.target.value.replace(/\D/g, '');
+                const formatted = formatPhoneNumber(value);
+                e.target.value = formatted;
+            });
+            
+            function formatPhoneNumber(value) {
+                if (!value) return value;
+                const phoneNumber = value.replace(/[^\d]/g, '');
+                const phoneNumberLength = phoneNumber.length;
+                if (phoneNumberLength < 4) return phoneNumber;
+                if (phoneNumberLength < 7) {
+                    return `(${phoneNumber.slice(0,3)}) ${phoneNumber.slice(3)}`;
+                }
+                return `(${phoneNumber.slice(0,3)}) ${phoneNumber.slice(3,6)}-${phoneNumber.slice(6,10)}`;
+            }
+        }
+
+        // ========== 12. COPYRIGHT YEAR UPDATE ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            const yearSpan = document.querySelector('#current-year');
+            if (yearSpan) {
+                yearSpan.textContent = new Date().getFullYear();
+            }
+        });
+
+        // ========== 13. BACK TO TOP BUTTON ==========
+        const backToTopBtn = document.createElement('button');
+        backToTopBtn.innerHTML = '<i class="fas fa-chevron-up"></i>';
+        backToTopBtn.className = 'fixed bottom-24 right-8 w-12 h-12 bg-luxury-gold text-black rounded-full shadow-lg opacity-0 transition-all duration-300 hover:bg-white z-40';
+        backToTopBtn.setAttribute('aria-label', 'Back to top');
+        document.body.appendChild(backToTopBtn);
+        
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 500) {
+                backToTopBtn.style.opacity = '1';
+                backToTopBtn.style.pointerEvents = 'all';
+            } else {
+                backToTopBtn.style.opacity = '0';
+                backToTopBtn.style.pointerEvents = 'none';
+            }
+        });
+        
+        backToTopBtn.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        console.log('LUMINA Studio website initialized successfully.');
+    </script>
+
+    <!-- Add current year script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const yearElements = document.querySelectorAll('.current-year');
+            const currentYear = new Date().getFullYear();
+            yearElements.forEach(el => {
+                el.textContent = currentYear;
+            });
+        });
+    </script>
+</body>
+</html>
